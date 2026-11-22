@@ -1,0 +1,25 @@
+name: build
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Descompactar o projeto
+        run: unzip -q THE_BEST_WATER.zip -d proj
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.14.3'
+      - name: Compilar
+        working-directory: proj
+        run: gradle build --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: THE_BEST_WATER-jar
+          path: proj/build/libs/THE_BEST_WATER-1.0.0.jar
